@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bem-vindo - Gitea Notifier</title>
+    <link rel="stylesheet" href="../styles/common.css">
+    <style>
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .welcome-container {
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 16px 48px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            width: 100%;
+            overflow: hidden;
+        }
+
+        .welcome-header {
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            padding: 40px 32px;
+            text-align: center;
+        }
+
+        .welcome-header h1 {
+            margin: 0 0 8px 0;
+            font-size: 32px;
+        }
+
+        .welcome-header p {
+            margin: 0;
+            opacity: 0.9;
+            font-size: 16px;
+        }
+
+        .welcome-icon {
+            font-size: 48px;
+            margin-bottom: 16px;
+        }
+
+        .welcome-body {
+            padding: 40px 32px;
+        }
+
+        .welcome-body h2 {
+            font-size: 20px;
+            margin: 0 0 16px 0;
+            color: #1f2937;
+        }
+
+        .welcome-step {
+            margin-bottom: 32px;
+        }
+
+        .welcome-step h3 {
+            font-size: 16px;
+            color: #2563eb;
+            margin: 0 0 12px 0;
+        }
+
+        .welcome-step p {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.6;
+            margin: 0 0 8px 0;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1f2937;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #2563eb;
+            box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+        }
+
+        .form-group small {
+            display: block;
+            margin-top: 6px;
+            color: #999;
+            font-size: 12px;
+        }
+
+        .welcome-actions {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .btn-skip {
+            flex: 1;
+            padding: 12px 16px;
+            background: #f3f4f6;
+            color: #374151;
+            border: 1px solid #d1d5db;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-skip:hover {
+            background: #e5e7eb;
+        }
+
+        .btn-continue {
+            flex: 1.5;
+            padding: 12px 16px;
+            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-continue:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(37, 99, 235, 0.4);
+        }
+
+        .btn-continue:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
+
+        .message {
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 16px;
+            font-size: 13px;
+            font-weight: 500;
+        }
+
+        .message.error {
+            background: #fee2e2;
+            color: #7f1d1d;
+            border: 1px solid #fecaca;
+        }
+
+        .message.success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #a7f3d0;
+        }
+
+        .success-icon {
+            display: none;
+            text-align: center;
+            padding: 40px 32px;
+        }
+
+        .success-icon.show {
+            display: block;
+        }
+
+        .success-icon .icon {
+            font-size: 64px;
+            margin-bottom: 16px;
+        }
+
+        .success-icon h2 {
+            color: #2563eb;
+            margin: 0 0 8px 0;
+        }
+
+        .success-icon p {
+            color: #666;
+            margin: 0;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome-container">
+        <div class="welcome-header">
+            <div class="welcome-icon">🔔</div>
+            <h1>Gitea Notifier</h1>
+            <p>Notificações em tempo real do Gitea</p>
+        </div>
+
+        <div class="welcome-body">
+            <div id="formContent">
+                <h2>Configuração Rápida</h2>
+                <p style="color: #666; margin: 0 0 24px 0;">
+                    Complete a configuração para começar a receber notificações em tempo real.
+                </p>
+
+                <div id="message" class="message" style="display: none;"></div>
+
+                <form id="setupForm">
+                    <div class="form-group">
+                        <label for="giteaUrl">🌐 URL do Servidor Gitea</label>
+                        <input 
+                            type="url" 
+                            id="giteaUrl" 
+                            name="giteaUrl" 
+                            placeholder="https://gitea.example.com"
+                            required
+                        >
+                        <small>Exemplo: http://10.1.1.25:3000 ou https://gitea.com</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="giteaToken">🔑 Token de Acesso API</label>
+                        <input 
+                            type="password" 
+                            id="giteaToken" 
+                            name="giteaToken" 
+                            placeholder="Seu token do Gitea"
+                            required
+                        >
+                        <small>Gere em: Configurações → Aplicações → Token</small>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="checkInterval">⏱️ Intervalo de Verificação</label>
+                        <input 
+                            type="number" 
+                            id="checkInterval" 
+                            name="checkInterval" 
+                            min="0.5" 
+                            step="0.5"
+                            value="0.5"
+                            required
+                        >
+                        <small>Em minutos (mínimo: 0.5)</small>
+                    </div>
+
+                    <div class="welcome-actions">
+                        <button type="button" id="skipBtn" class="btn-skip">Pular por Agora</button>
+                        <button type="submit" class="btn-continue">Continuar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div id="successContent" class="success-icon">
+                <div class="icon">✅</div>
+                <h2>Tudo Pronto!</h2>
+                <p>
+                    A extensão está configurada e começará a monitorar suas notificações.
+                </p>
+                <button type="button" id="closeBtn" class="btn-continue" style="margin-top: 24px; width: 100%;">
+                    Fechar e Começar
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="home.js"></script>
+</body>
+</html>
