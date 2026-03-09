@@ -61,7 +61,7 @@ async function checkNotifications() {
 
                 chrome.notifications.create(n.id.toString(), {
                     type: "basic",
-                    iconUrl: "icons/icon-128.png",
+                    iconUrl: chrome.runtime.getURL("icons/icon-48.png"),
                     title: title,
                     message: message,
                     requireInteraction: false
